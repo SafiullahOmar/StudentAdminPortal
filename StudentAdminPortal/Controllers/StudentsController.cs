@@ -19,7 +19,8 @@ namespace StudentAdminPortal.Controllers
             _StudentRepo = studentRepo;
         }
         [Route("[action]")]
-        public async Task<IActionResult> GetAllStudentAsync() {
+        public async Task<IActionResult> GetAllStudentAsync()
+        {
             return Ok(await _StudentRepo.GetAllStudentsAsync());
         }
 

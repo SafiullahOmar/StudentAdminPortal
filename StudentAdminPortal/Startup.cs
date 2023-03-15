@@ -33,6 +33,16 @@ namespace StudentAdminPortal
             services.AddControllers();
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("con")));
             services.AddScoped<IStudentRepository,StudentRepository>();
+            services.AddCors(options=>
+                {
+                    options.AddPolicy("angularApplication",(builder)=> {
+                        builder.WithOrigins("http://localhost:4200")
+                        .AllowAnyHeader()
+                        .WithMethods("GET", "POST", "PUT", "DELETE")
+                        .WithExposedHeaders("*");
+                    });
+                }
+            );
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "StudentAdminPortal", Version = "v1" });
@@ -50,7 +60,7 @@ namespace StudentAdminPortal
             }
 
             app.UseHttpsRedirection();
-
+            app.UseCors("angularApplication");
             app.UseRouting();
 
             app.UseAuthorization();
