@@ -40,6 +40,18 @@ namespace StudentAdminPortal.Repository
                 .FirstOrDefaultAsync();
         }
 
+        public async Task<Student> studentDelete(int id)
+        {
+            var student = await GetStudentAsync(id);
+            if (student!=null) {
+                _context.Students.Remove(student);
+                await _context.SaveChangesAsync();
+                return student;
+            }
+
+            return null;
+        }
+
         public async Task<Student> studentUpdate(int id, updateStudentVM student)
         {
             var studentFromDb = await _context.Students.Where(x => x.Id == id).FirstOrDefaultAsync();
