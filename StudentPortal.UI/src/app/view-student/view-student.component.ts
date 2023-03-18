@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Gender } from '../infrastructure/gender.interface';
 import { student } from '../infrastructure/student.interface';
 import { StudentService } from '../student.service';
 
@@ -10,6 +11,7 @@ import { StudentService } from '../student.service';
 })
 export class ViewStudentComponent implements OnInit {
   Id: string | null | undefined;
+  GenderData:Gender[]=[];
   studentData: student = {
     id: 0,
     name: '',
@@ -33,6 +35,10 @@ export class ViewStudentComponent implements OnInit {
 
   }
   ngOnInit(): void {
+
+    this.studentS.getAllGender().subscribe((data)=>{
+      this.GenderData=data;
+    });
     this.route.paramMap.subscribe((params) => {
       this.Id = params.get('Id');
     });
