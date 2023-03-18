@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using StudentAdminPortal.Models;
 using StudentAdminPortal.Repository;
+using StudentAdminPortal.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,9 +21,28 @@ namespace StudentAdminPortal.Controllers
             _StudentRepo = studentRepo;
         }
         [Route("[action]")]
-        public async Task<IActionResult> GetAllStudentAsync()
+        public async Task<IActionResult> GetAllStudent()
         {
             return Ok(await _StudentRepo.GetAllStudentsAsync());
+        }
+
+        [Route("[action]/{id:int}")]
+        public async Task<IActionResult> getStudent(int id) {
+            return Ok(await _StudentRepo.GetStudentAsync( id));
+        }
+
+        [HttpPut]
+        [Route("[action]/{id:int}")]
+        public async Task<IActionResult> updateStudent([FromRoute] int id , [FromBody]updateStudentVM  student)
+        {
+            if (await _StudentRepo.Exists(id)) {
+                var updateStudent = _StudentRepo.studentUpdate(id, student);
+                if (updateStudent != null) {
+                    return Ok(updateStudent);
+                }
+            }
+
+            return NotFound();
         }
 
     }
